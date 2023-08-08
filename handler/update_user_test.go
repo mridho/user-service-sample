@@ -300,7 +300,7 @@ func TestUpdateUser(t *testing.T) {
 			}
 
 			e := echo.New()
-			req := httptest.NewRequest(echo.PUT, "/", reqBody)
+			req := httptest.NewRequest(echo.PATCH, "/", reqBody)
 			req.Header.Set(authentication.AuthHeaderKey, tc.jwt)
 			if !tc.invalidMime {
 				req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)

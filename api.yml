@@ -138,7 +138,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-    put:      
+    patch:      
       security:
         - bearerAuth: []
       summary: Update user data      

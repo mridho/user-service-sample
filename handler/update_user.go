@@ -14,7 +14,7 @@ import (
 )
 
 // Update user data
-// (PUT /v1/user)
+// (PATCH /v1/user)
 func (s *Server) UpdateUser(ctx echo.Context) error {
 	tracestr := "handler.UpdateUser"
 	if err := context_helper.CheckCtxErr(ctx); err != nil {
