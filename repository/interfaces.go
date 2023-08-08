@@ -4,8 +4,12 @@
 // interfaces using mockgen. See the Makefile for more information.
 package repository
 
-import "context"
+import (
+	"context"
+	"database/sql"
+)
 
 type RepositoryInterface interface {
-	GetTestById(ctx context.Context, input GetTestByIdInput) (output GetTestByIdOutput, err error)
+	GetUser(ctx context.Context, input GetUserInput) (output User, err error)
+	InsertUser(ctx context.Context, tx *sql.Tx, input InsertUserInput) (output InsertUserOutput, err error)
 }

@@ -1,10 +1,39 @@
 // This file contains types that are used in the repository layer.
 package repository
 
-type GetTestByIdInput struct {
-	Id int
+import (
+	"errors"
+	"time"
+)
+
+var (
+	ErrInvalidInputParam = errors.New("invalid input param")
+)
+
+type InsertUserInput struct {
+	PhoneNumber  string
+	FullName     string
+	PasswordHash string
+	Salt         string
 }
 
-type GetTestByIdOutput struct {
-	Name string
+type InsertUserOutput struct {
+	Id string
+}
+
+type GetUserInput struct {
+	Id          string
+	PhoneNumber string
+}
+
+type User struct {
+	Id           string
+	CreatedAt    *time.Time
+	UpdatedAt    *time.Time
+	DeletedAt    *time.Time
+	PhoneNumber  string
+	FullName     string
+	PasswordHash string
+	Salt         string
+	LoginCount   uint32
 }

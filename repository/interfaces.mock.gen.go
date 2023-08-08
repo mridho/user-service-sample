@@ -6,6 +6,7 @@ package repository
 
 import (
 	context "context"
+	sql "database/sql"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -34,17 +35,32 @@ func (m *MockRepositoryInterface) EXPECT() *MockRepositoryInterfaceMockRecorder 
 	return m.recorder
 }
 
-// GetTestById mocks base method.
-func (m *MockRepositoryInterface) GetTestById(ctx context.Context, input GetTestByIdInput) (GetTestByIdOutput, error) {
+// GetUser mocks base method.
+func (m *MockRepositoryInterface) GetUser(ctx context.Context, input GetUserInput) (User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetTestById", ctx, input)
-	ret0, _ := ret[0].(GetTestByIdOutput)
+	ret := m.ctrl.Call(m, "GetUser", ctx, input)
+	ret0, _ := ret[0].(User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetTestById indicates an expected call of GetTestById.
-func (mr *MockRepositoryInterfaceMockRecorder) GetTestById(ctx, input interface{}) *gomock.Call {
+// GetUser indicates an expected call of GetUser.
+func (mr *MockRepositoryInterfaceMockRecorder) GetUser(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTestById", reflect.TypeOf((*MockRepositoryInterface)(nil).GetTestById), ctx, input)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockRepositoryInterface)(nil).GetUser), ctx, input)
+}
+
+// InsertUser mocks base method.
+func (m *MockRepositoryInterface) InsertUser(ctx context.Context, tx *sql.Tx, input InsertUserInput) (InsertUserOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InsertUser", ctx, tx, input)
+	ret0, _ := ret[0].(InsertUserOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// InsertUser indicates an expected call of InsertUser.
+func (mr *MockRepositoryInterfaceMockRecorder) InsertUser(ctx, tx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertUser", reflect.TypeOf((*MockRepositoryInterface)(nil).InsertUser), ctx, tx, input)
 }

@@ -44,6 +44,8 @@ paths:
                   maxLength: 64
                   pattern: ^(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{6,64}$
                   example: pAssW0$ds
+                  x-oapi-codegen-extra-tags:
+                    validate: required,min=6,max=64,_password
                   description: Passwords must be minimum 6 characters and maximum 64 characters, containing at least 1 capital character AND 1 number AND 1 special (non alpha-numeric) character.
       responses:
         '201':
@@ -89,6 +91,8 @@ paths:
                 password:
                   type: string
                   example: pAssW0$ds
+                  x-oapi-codegen-extra-tags:
+                    validate: required
                   description: Registered user's password.
       responses:
         '200':
@@ -152,9 +156,9 @@ paths:
                     - fullName
               properties:
                 phoneNumber:
-                  $ref: "#/components/schemas/PhoneNumberRequest"
+                  $ref: "#/components/schemas/PhoneNumberOptRequest"
                 fullName:
-                  $ref: "#/components/schemas/FullNameRequest"
+                  $ref: "#/components/schemas/FullNameOptRequest"
       responses:
         '200':
           description: Update used data success
@@ -237,10 +241,30 @@ components:
       maxLength: 13
       pattern: ^\+62\d+$
       example: '+627000709251'
+      x-oapi-codegen-extra-tags:
+        validate: required,min=10,max=13,startswith=+62,e164
       description: Phone numbers must be at minimum 10 characters and maximum 13 characters and must start with the Indonesia country code “+62”.
-    
+    PhoneNumberOptRequest:
+      type: string
+      minLength: 10
+      maxLength: 13
+      pattern: ^\+62\d+$
+      example: '+627000709251'
+      x-oapi-codegen-extra-tags:
+        validate: omitempty,min=10,max=13,startswith=+62,e164
+      description: Optional field phone numbers when filled must be at minimum 10 characters and maximum 13 characters and must start with the Indonesia country code “+62”.
+
     FullNameRequest:
       type: string
       minLength: 3
       maxLength: 60
+      x-oapi-codegen-extra-tags:
+        validate: required,min=3,max=60
       description: Full name must be at minimum 3 characters and maximum 60 characters.
+    FullNameOptRequest:
+      type: string
+      minLength: 3
+      maxLength: 60
+      x-oapi-codegen-extra-tags:
+        validate: omitempty,min=3,max=60
+      description: Optional field full name when filled must be at minimum 3 characters and maximum 60 characters.
