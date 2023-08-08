@@ -7,11 +7,17 @@
   In this assignment we will use PostgreSQL as the database.
   */
 
-/** This is test table. Remove this table and replace with your own tables. */
-CREATE TABLE test (
-	id serial PRIMARY KEY,
-	name VARCHAR ( 50 ) UNIQUE NOT NULL
-);
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-INSERT INTO test (name) VALUES ('test1');
-INSERT INTO test (name) VALUES ('test2');
+-- users table
+CREATE TABLE users (
+    "id" UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "created_at" timestamp NOT NULL DEFAULT timezone('utc', now()),
+    "updated_at" timestamp NOT NULL DEFAULT timezone('utc', now()),
+    "deleted_at" timestamp,
+    "phone_number" VARCHAR(20) NOT NULL UNIQUE,
+    "full_name" VARCHAR(100) NOT NULL,
+    "password_hash" VARCHAR(100) NOT NULL,
+    "salt" VARCHAR(20) NOT NULL,
+    "login_count" INTEGER NOT NULL DEFAULT 0
+);

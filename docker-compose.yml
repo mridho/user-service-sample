@@ -4,7 +4,7 @@ services:
     ports:
       - "8080:1323"
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/database?sslmode=disable
+      DATABASE_URL: postgres://postgres:postgres@db:5432/user_service_db?sslmode=disable
     depends_on:
       db:
         condition: service_healthy
@@ -15,7 +15,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: database
+      POSTGRES_DB: user_service_db
     ports:
       - 5432:5432
     expose:

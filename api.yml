@@ -12,47 +12,235 @@ openapi: "3.0.0"
 info:
   version: 1.0.0
   title: User Service
+  description: |-
+    User management service API Contract
   license:
     name: MIT
 servers:
-  - url: http://localhost
+  - url: http://localhost:8080
 paths:
-  /hello:
-    get:
-      summary: This is just a test endpoint to get you started. Please delete this endpoint.
-      operationId: hello
-      parameters:
-        - name: id
-          in: query
-          required: true
-          schema:
-            type: integer
+  /v1/register:
+    post:
+      summary: Register new user to service
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phoneNumber
+                - fullName
+                - password
+              properties:
+                phoneNumber:
+                  $ref: "#/components/schemas/PhoneNumberRequest"
+                fullName:
+                  $ref: "#/components/schemas/FullNameRequest"
+                password:
+                  type: string
+                  minLength: 6
+                  maxLength: 64
+                  pattern: ^(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{6,64}$
+                  example: pAssW0$ds
+                  description: Passwords must be minimum 6 characters and maximum 64 characters, containing at least 1 capital character AND 1 number AND 1 special (non alpha-numeric) character.
       responses:
-        '200':
-          description: Test return
+        '201':
+          description: Registration success
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/HelloResponse"
-        '404':
-          description: Not found
+                $ref: "#/components/schemas/RegisterResponse"
+        '400':
+          description: Bad request
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        '409':
+          description: Phone number already registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/login:
+    post:
+      summary: Log In as registered user, will return JWT 
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phoneNumber
+                - password
+              properties:
+                phoneNumber:
+                  $ref: "#/components/schemas/PhoneNumberRequest"
+                password:
+                  type: string
+                  example: pAssW0$ds
+                  description: Registered user's password.
+      responses:
+        '200':
+          description: Log In success
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/user:
+    get:      
+      security:
+        - bearerAuth: []
+      summary: Retrieve user detail
+      operationId: getUser
+      responses:
+        '200':
+          description: Retrieve user detail success
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/UserDataResponse"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:      
+      security:
+        - bearerAuth: []
+      summary: Update user data      
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - required:
+                    - phoneNumber
+                - required:
+                    - fullName
+              properties:
+                phoneNumber:
+                  $ref: "#/components/schemas/PhoneNumberRequest"
+                fullName:
+                  $ref: "#/components/schemas/FullNameRequest"
+      responses:
+        '200':
+          description: Update used data success
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/UserDataResponse"
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '409':
+          description: New Phone number already registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+      description: JWT with RS256 algorithm
   schemas:
-    HelloResponse:
-      type: object
-      required:
-        - message
-      properties:
-        message:
-          type: string
     ErrorResponse:
       type: object
       required:
-        - message
+        - messages
       properties:
+        messages:
+          type: array
+          items:
+            type: string
+ 
+    RegisterResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
         message:
           type: string
+ 
+    LoginResponse:
+      type: object
+      required:
+        - id
+        - token
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+
+    UserDataResponse:
+      type: object
+      required:
+        - phoneNumber
+        - fullName
+      properties:
+        phoneNumber:
+          type: string
+        fullName:
+          type: string
+
+    PhoneNumberRequest:
+      type: string
+      minLength: 10
+      maxLength: 13
+      pattern: ^\+62\d+$
+      example: '+627000709251'
+      description: Phone numbers must be at minimum 10 characters and maximum 13 characters and must start with the Indonesia country code “+62”.
+    
+    FullNameRequest:
+      type: string
+      minLength: 3
+      maxLength: 60
+      description: Full name must be at minimum 3 characters and maximum 60 characters.
