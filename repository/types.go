@@ -4,6 +4,9 @@ package repository
 import (
 	"errors"
 	"time"
+
+	"github.com/SawitProRecruitment/UserService/generated"
+	"github.com/SawitProRecruitment/UserService/utils/string_helper"
 )
 
 var (
@@ -36,4 +39,18 @@ type User struct {
 	PasswordHash string
 	Salt         string
 	LoginCount   uint32
+}
+
+func (u *User) UpdateByReq(req generated.UpdateUserJSONRequestBody) {
+	if u == nil {
+		return
+	}
+
+	if reqFullName := string_helper.GetAndTrimPointerStringValue(req.FullName); reqFullName != "" {
+		u.FullName = reqFullName
+	}
+
+	if reqPhoneNumber := string_helper.GetAndTrimPointerStringValue(req.PhoneNumber); reqPhoneNumber != "" {
+		u.PhoneNumber = reqPhoneNumber
+	}
 }

@@ -21,3 +21,10 @@ CREATE TABLE users (
     "salt" VARCHAR(20) NOT NULL,
     "login_count" INTEGER NOT NULL DEFAULT 0
 );
+
+-- sample data, with password: pAssW0$ds
+INSERT INTO users ("phone_number", "full_name", "password_hash", "salt") 
+VALUES 
+  ('+62810000001', 'Sample User 1', '9996f6bb66439b2d8bae91fc8f0fd81158c9d4f91ba9a892d30e2581ec8ddb26', '486j+Is1QGia1g=='), 
+  ('+62810000002', 'Sample User 2', '9996f6bb66439b2d8bae91fc8f0fd81158c9d4f91ba9a892d30e2581ec8ddb26', '486j+Is1QGia1g=='),
+  ('+62810000003', 'Sample User 3', '9996f6bb66439b2d8bae91fc8f0fd81158c9d4f91ba9a892d30e2581ec8ddb26', '486j+Is1QGia1g==');
