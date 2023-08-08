@@ -190,7 +190,8 @@ func TestRegister(t *testing.T) {
 			expectations: func(t *testing.T, s *serverMock) {
 				s.repository.EXPECT().GetUser(gomock.Any(), repository.GetUserInput{
 					PhoneNumber: validReqBody.PhoneNumber,
-				}).Return(repository.User{}, errors.New(response.InternalServerErrorMsg))
+				}).
+					Return(repository.User{}, errors.New(response.InternalServerErrorMsg))
 			},
 			expectedHttpCode: http.StatusInternalServerError,
 			expectedErrMsg:   response.InternalServerErrorMsg,
@@ -201,7 +202,8 @@ func TestRegister(t *testing.T) {
 			expectations: func(t *testing.T, s *serverMock) {
 				s.repository.EXPECT().GetUser(gomock.Any(), repository.GetUserInput{
 					PhoneNumber: validReqBody.PhoneNumber,
-				}).Return(validUser, nil)
+				}).
+					Return(validUser, nil)
 			},
 			expectedHttpCode: http.StatusConflict,
 			expectedErrMsg:   response.PhoneAlreadyRegisteredErrorMsg,

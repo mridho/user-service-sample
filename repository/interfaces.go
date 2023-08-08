@@ -12,4 +12,5 @@ import (
 type RepositoryInterface interface {
 	GetUser(ctx context.Context, input GetUserInput) (output User, err error)
 	InsertUser(ctx context.Context, tx *sql.Tx, input InsertUserInput) (output InsertUserOutput, err error)
+	IncrementUserLoginCount(ctx context.Context, tx *sql.Tx, input User) (err error)
 }
