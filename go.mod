@@ -13,6 +13,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lib/pq v1.10.9
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/xorcare/pointer v1.2.2
 )
 
