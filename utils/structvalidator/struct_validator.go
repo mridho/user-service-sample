@@ -118,7 +118,8 @@ func (ct customTranslation) RegisterCustomTranslation(validate *validator.Valida
 		translator,
 		func(ut ut.Translator) error {
 			return ut.Add(ct.Tag, ct.Translation, true)
-		}, func(ut ut.Translator, fe validator.FieldError) string {
+		},
+		func(ut ut.Translator, fe validator.FieldError) string {
 			t, _ := ut.T(ct.Tag, fe.Field(), fe.Param())
 			return t
 		},

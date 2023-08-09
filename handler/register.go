@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/SawitProRecruitment/UserService/generated"
@@ -30,15 +29,8 @@ func (s *Server) Register(ctx echo.Context) error {
 	}
 
 	// check phone number
-	user, err := s.Repository.GetUser(ctx.Request().Context(), repository.GetUserInput{
-		PhoneNumber: req.PhoneNumber,
-	})
-	if err != nil && err != sql.ErrNoRows {
-		ctx.Logger().Errorf("%s, failed GetUser by PhoneNumber, err: %v", tracestr, err)
-		return response.InternalErrorResponse(ctx)
-	}
-	if user.Id != "" {
-		return response.PhoneAlreadyRegistered(ctx)
+	if err := s.checkIsPhoneAlreadyRegistered(ctx, tracestr, req.PhoneNumber); err != nil {
+		return err
 	}
 
 	hashedPassword, salt := password.SaltAndHashPassword(req.Password)

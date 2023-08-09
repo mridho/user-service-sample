@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/SawitProRecruitment/UserService/generated"
@@ -47,18 +46,11 @@ func (s *Server) UpdateUser(ctx echo.Context) error {
 		return response.InternalErrorResponse(ctx)
 	}
 
-	// check phone number
+	// check phone number if req not empty & not the same with user current phone number
 	reqPhoneNumber := string_helper.GetAndTrimPointerStringValue(req.PhoneNumber)
 	if reqPhoneNumber != "" && reqPhoneNumber != user.PhoneNumber {
-		uwp, err := s.Repository.GetUser(ctx.Request().Context(), repository.GetUserInput{
-			PhoneNumber: reqPhoneNumber,
-		})
-		if err != nil && err != sql.ErrNoRows {
-			ctx.Logger().Errorf("%s, failed GetUser by PhoneNumber, err: %v", tracestr, err)
-			return response.InternalErrorResponse(ctx)
-		}
-		if uwp.Id != "" {
-			return response.PhoneAlreadyRegistered(ctx)
+		if err := s.checkIsPhoneAlreadyRegistered(ctx, tracestr, reqPhoneNumber); err != nil {
+			return err
 		}
 	}
 
