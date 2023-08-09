@@ -1,8 +1,7 @@
 package main
 
 import (
-	"os"
-
+	"github.com/SawitProRecruitment/UserService/config"
 	"github.com/SawitProRecruitment/UserService/generated"
 	"github.com/SawitProRecruitment/UserService/handler"
 	"github.com/SawitProRecruitment/UserService/repository"
@@ -13,18 +12,23 @@ import (
 func main() {
 	e := echo.New()
 
-	var server generated.ServerInterface = newServer()
+	cfg, err := config.NewConfig("config.yml")
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
+	var server generated.ServerInterface = newServer(cfg)
 
 	generated.RegisterHandlers(e, server)
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
-func newServer() *handler.Server {
-	dbDsn := os.Getenv("DATABASE_URL")
+func newServer(cfg *config.Config) *handler.Server {
+	// dbDsn := os.Getenv("DATABASE_URL")
 	var repo repository.RepositoryInterface = repository.NewRepository(repository.NewRepositoryOptions{
-		Dsn: dbDsn,
+		Dsn: cfg.DB.ToJdbcUrl(),
 	})
 	opts := handler.NewServerOptions{
+		Config:     cfg,
 		Repository: repo,
 	}
 	return handler.NewServer(opts)

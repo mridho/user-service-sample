@@ -15,6 +15,9 @@ init: generate
 	go mod tidy
 	go mod vendor
 
+run-docker:
+	docker-compose up --build
+
 test:
 	go test -short -coverprofile coverage.out -v ./...
 

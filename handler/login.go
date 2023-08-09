@@ -25,7 +25,7 @@ func (s *Server) Login(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return response.SingleErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
-	if messages, _ := s.validator.ValidateStruct(req); len(messages) > 0 {
+	if messages, _ := s.Validator.ValidateStruct(req); len(messages) > 0 {
 		return response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
 	}
 
@@ -45,7 +45,7 @@ func (s *Server) Login(ctx echo.Context) error {
 	}
 
 	// user & password correct
-	token, err := authentication.GenerateSignedToken(user)
+	token, err := authentication.GenerateSignedToken(s.Config.Secret, user)
 	if err != nil {
 		ctx.Logger().Errorf("%s, failed GenerateSignedToken, err: %v", tracestr, err)
 		return response.InternalErrorResponse(ctx)

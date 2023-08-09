@@ -4,6 +4,7 @@ import (
 	"crypto/rsa"
 	"time"
 
+	"github.com/SawitProRecruitment/UserService/config"
 	"github.com/SawitProRecruitment/UserService/repository"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -18,7 +19,7 @@ type jwtCustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateSignedToken(user repository.User) (token string, err error) {
+func GenerateSignedToken(cfg config.SecretConfig, user repository.User) (token string, err error) {
 	// Set custom claims
 	claims := &jwtCustomClaims{
 		Id:       user.Id,
@@ -31,7 +32,7 @@ func GenerateSignedToken(user repository.User) (token string, err error) {
 	// Create JWT with claims
 	jwtWithClaim := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	privateKey, err := readRSAPrivateKey([]byte(rsaPrivateStr))
+	privateKey, err := readRSAPrivateKey([]byte(cfg.RsaPrivatePem))
 	if err != nil {
 		return "", err
 	}

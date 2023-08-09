@@ -19,7 +19,7 @@ func (s *Server) GetUser(ctx echo.Context) error {
 		return err
 	}
 
-	claims, err := authentication.VerifyToken(ctx)
+	claims, err := authentication.VerifyToken(ctx, s.Config.Secret)
 	if err != nil {
 		ctx.Logger().Infof("%s, VerifyToken failed, err: %+v", tracestr, err)
 		return response.AccessForbidden(ctx)

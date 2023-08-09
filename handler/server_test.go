@@ -3,13 +3,14 @@ package handler
 import (
 	"testing"
 
+	"github.com/SawitProRecruitment/UserService/config"
 	"github.com/SawitProRecruitment/UserService/repository"
-	"github.com/SawitProRecruitment/UserService/utils/structvalidator"
+	"github.com/SawitProRecruitment/UserService/utils/test_helper"
 	"github.com/golang/mock/gomock"
 )
 
 type serverMock struct {
-	validator  *structvalidator.StructValidator
+	config     *config.Config
 	repository *repository.MockRepositoryInterface
 	cleanUp    func()
 
@@ -21,12 +22,22 @@ func setupServerMock(t *testing.T) *serverMock {
 	ctrl := gomock.NewController(t)
 	repository := repository.NewMockRepositoryInterface(ctrl)
 
+	mockConfig := &config.Config{
+		DB: config.DBConfig{
+			Host:     "localhost",
+			Port:     5432,
+			User:     "postgres",
+			Password: "postgres",
+			Database: "user_service_db",
+		},
+		Secret: config.SecretConfig{
+			RsaPrivatePem: test_helper.TestRsaPrivatePem,
+			RsaPublicPem:  test_helper.TestRsaPublicPem,
+		},
+	}
+
 	return &serverMock{
-		validator: structvalidator.NewWithOptions(
-			structvalidator.WithFieldTag("json"),
-			structvalidator.WithCustomTranslation("startswith", "{0} should start with {1}"),
-			structvalidator.WithPasswordValidationTag(),
-		),
+		config:     mockConfig,
 		repository: repository,
 		cleanUp: func() {
 			t.Helper()
@@ -34,6 +45,7 @@ func setupServerMock(t *testing.T) *serverMock {
 		},
 
 		server: NewServer(NewServerOptions{
+			Config:     mockConfig,
 			Repository: repository,
 		}),
 	}

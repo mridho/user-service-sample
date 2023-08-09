@@ -15,6 +15,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/xorcare/pointer v1.2.2
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -39,5 +40,4 @@ require (
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

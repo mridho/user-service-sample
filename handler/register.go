@@ -25,7 +25,7 @@ func (s *Server) Register(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return response.SingleErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
-	if messages, _ := s.validator.ValidateStruct(req); len(messages) > 0 {
+	if messages, _ := s.Validator.ValidateStruct(req); len(messages) > 0 {
 		return response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
 	}
 
@@ -50,7 +50,7 @@ func (s *Server) Register(ctx echo.Context) error {
 		Salt:         salt,
 	})
 	if err != nil {
-		ctx.Logger().Errorf("%s, failed InsertNewUser, err: %v", tracestr, err)
+		ctx.Logger().Errorf("%s, failed InsertUser, err: %v", tracestr, err)
 		return response.InternalErrorResponse(ctx)
 	}
 

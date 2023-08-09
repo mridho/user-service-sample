@@ -21,7 +21,7 @@ func (s *Server) UpdateUser(ctx echo.Context) error {
 		return err
 	}
 
-	claims, err := authentication.VerifyToken(ctx)
+	claims, err := authentication.VerifyToken(ctx, s.Config.Secret)
 	if err != nil {
 		ctx.Logger().Infof("%s, VerifyToken failed, err: %+v", tracestr, err)
 		return response.AccessForbidden(ctx)
@@ -31,7 +31,7 @@ func (s *Server) UpdateUser(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return response.SingleErrorResponse(ctx, http.StatusBadRequest, err.Error())
 	}
-	if messages, _ := s.validator.ValidateStruct(req); len(messages) > 0 {
+	if messages, _ := s.Validator.ValidateStruct(req); len(messages) > 0 {
 		return response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
 	}
 	if req.FullName == nil && req.PhoneNumber == nil {

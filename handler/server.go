@@ -1,26 +1,30 @@
 package handler
 
 import (
+	"github.com/SawitProRecruitment/UserService/config"
 	"github.com/SawitProRecruitment/UserService/repository"
 	"github.com/SawitProRecruitment/UserService/utils/structvalidator"
 )
 
 type Server struct {
-	validator  *structvalidator.StructValidator
+	Validator  *structvalidator.StructValidator
+	Config     *config.Config
 	Repository repository.RepositoryInterface
 }
 
 type NewServerOptions struct {
+	Config     *config.Config
 	Repository repository.RepositoryInterface
 }
 
 func NewServer(opts NewServerOptions) *Server {
 	return &Server{
-		validator: structvalidator.NewWithOptions(
+		Validator: structvalidator.NewWithOptions(
 			structvalidator.WithFieldTag("json"),
 			structvalidator.WithCustomTranslation("startswith", "{0} should start with {1}"),
 			structvalidator.WithPasswordValidationTag(),
 		),
+		Config:     opts.Config,
 		Repository: opts.Repository,
 	}
 }

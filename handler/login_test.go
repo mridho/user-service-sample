@@ -40,11 +40,12 @@ func TestLogin(t *testing.T) {
 	)
 
 	testCases := []struct {
-		title        string
-		request      *generated.LoginJSONRequestBody
-		aborted      bool
-		invalidMime  bool
-		expectations func(t *testing.T, s *serverMock)
+		title           string
+		request         *generated.LoginJSONRequestBody
+		aborted         bool
+		invalidMime     bool
+		secretCfgNotSet bool
+		expectations    func(t *testing.T, s *serverMock)
 
 		expectedHttpCode int
 		expectedErrMsg   string
@@ -148,6 +149,19 @@ func TestLogin(t *testing.T) {
 			expectedErrMsg:   response.IncorrectLoginErrorMsg,
 		},
 		{
+			title:           "error in authentication.GenerateSignedToken because secret config not set",
+			request:         &validReqBody,
+			secretCfgNotSet: true,
+			expectations: func(t *testing.T, s *serverMock) {
+				s.repository.EXPECT().GetUser(gomock.Any(), repository.GetUserInput{
+					PhoneNumber: validReqBody.PhoneNumber,
+				}).
+					Return(validUser, nil)
+			},
+			expectedHttpCode: http.StatusInternalServerError,
+			expectedErrMsg:   response.InternalServerErrorMsg,
+		},
+		{
 			title:   "error in Repository.IncrementUserLoginCount only log error - login success",
 			request: &validReqBody,
 			expectations: func(t *testing.T, s *serverMock) {
@@ -184,6 +198,11 @@ func TestLogin(t *testing.T) {
 			// Setup
 			s := setupServerMock(t)
 			defer s.cleanUp()
+
+			if tc.secretCfgNotSet {
+				s.config.Secret.RsaPrivatePem = ""
+				s.config.Secret.RsaPublicPem = ""
+			}
 
 			var reqBody io.Reader
 			if tc.request != nil {

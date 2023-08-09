@@ -21,19 +21,7 @@ func Validate(in string) bool {
 		return false
 	}
 
-	if !hasCapitalCharacter(in) {
-		return false
-	}
-
-	if !hasNumber(in) {
-		return false
-	}
-
-	if !hasSpecialCharacter(in) {
-		return false
-	}
-
-	return true
+	return hasCapitalCharacter(in) && hasNumber(in) && hasSpecialCharacter(in)
 }
 
 func hasCapitalCharacter(input string) bool {

@@ -126,8 +126,8 @@ paths:
             application/json:    
               schema:
                 $ref: "#/components/schemas/UserDataResponse"
-        '400':
-          description: Bad request
+        '403':
+          description: Unauthorized access
           content:
             application/json:
               schema:

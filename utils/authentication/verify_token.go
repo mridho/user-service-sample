@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/SawitProRecruitment/UserService/config"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"
@@ -20,7 +21,7 @@ var (
 	ErrDecodingClaims            = errors.New("error decoding claims")
 )
 
-func VerifyToken(ctx echo.Context) (cc *jwtCustomClaims, err error) {
+func VerifyToken(ctx echo.Context, cfg config.SecretConfig) (cc *jwtCustomClaims, err error) {
 	authHeaderVal := strings.TrimSpace(ctx.Request().Header.Get(AuthHeaderKey))
 	authHeaderSplit := strings.Split(authHeaderVal, " ")
 	if len(authHeaderSplit) != 2 {
@@ -28,7 +29,7 @@ func VerifyToken(ctx echo.Context) (cc *jwtCustomClaims, err error) {
 	}
 	receivedToken := authHeaderSplit[1]
 
-	publicKey, err := readRSAPublicKey([]byte(rsaPublicKey))
+	publicKey, err := readRSAPublicKey([]byte(cfg.RsaPublicPem))
 	if err != nil {
 		return nil, err
 	}
