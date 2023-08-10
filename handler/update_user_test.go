@@ -77,7 +77,7 @@ func TestUpdateUser(t *testing.T) {
 			request:          nil,
 			expectations:     func(t *testing.T, s *serverMock) {},
 			expectedHttpCode: http.StatusBadRequest,
-			expectedErrMsg:   `request need to have either fullName or phoneNumber`,
+			expectedErrMsg:   `"fullName is a required field when PhoneNumber not present","phoneNumber is a required field when FullName not present"`,
 		},
 		{
 			title:            "req body Content-Type is not application/json",

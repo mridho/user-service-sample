@@ -9,6 +9,7 @@ import (
 	"github.com/SawitProRecruitment/UserService/utils/authentication"
 	"github.com/SawitProRecruitment/UserService/utils/context_helper"
 	"github.com/SawitProRecruitment/UserService/utils/password"
+	"github.com/SawitProRecruitment/UserService/utils/request_helper"
 	"github.com/SawitProRecruitment/UserService/utils/response"
 	"github.com/labstack/echo/v4"
 )
@@ -22,11 +23,8 @@ func (s *Server) Login(ctx echo.Context) error {
 	}
 
 	var req generated.LoginJSONRequestBody
-	if err := ctx.Bind(&req); err != nil {
-		return response.SingleErrorResponse(ctx, http.StatusBadRequest, err.Error())
-	}
-	if messages, _ := s.Validator.ValidateStruct(req); len(messages) > 0 {
-		return response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
+	if err := request_helper.BindAndValidateReqBody(ctx, s.Validator, &req); err != nil {
+		return err
 	}
 
 	user, err := s.Repository.GetUser(ctx.Request().Context(), repository.GetUserInput{

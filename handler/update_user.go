@@ -7,6 +7,7 @@ import (
 	"github.com/SawitProRecruitment/UserService/repository"
 	"github.com/SawitProRecruitment/UserService/utils/authentication"
 	"github.com/SawitProRecruitment/UserService/utils/context_helper"
+	"github.com/SawitProRecruitment/UserService/utils/request_helper"
 	"github.com/SawitProRecruitment/UserService/utils/response"
 	"github.com/SawitProRecruitment/UserService/utils/string_helper"
 	"github.com/labstack/echo/v4"
@@ -27,14 +28,8 @@ func (s *Server) UpdateUser(ctx echo.Context) error {
 	}
 
 	var req generated.UpdateUserJSONRequestBody
-	if err := ctx.Bind(&req); err != nil {
-		return response.SingleErrorResponse(ctx, http.StatusBadRequest, err.Error())
-	}
-	if messages, _ := s.Validator.ValidateStruct(req); len(messages) > 0 {
-		return response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
-	}
-	if req.FullName == nil && req.PhoneNumber == nil {
-		return response.SingleErrorResponse(ctx, http.StatusBadRequest, "request need to have either fullName or phoneNumber")
+	if err := request_helper.BindAndValidateReqBody(ctx, s.Validator, &req); err != nil {
+		return err
 	}
 
 	// get current user data
@@ -55,10 +50,11 @@ func (s *Server) UpdateUser(ctx echo.Context) error {
 	}
 
 	// update current user data
-	user.UpdateByReq(req)
-	if err := s.Repository.UpdateUser(ctx.Request().Context(), nil, user); err != nil {
-		ctx.Logger().Errorf("%s, failed UpdateUser, err: %v", tracestr, err)
-		return response.InternalErrorResponse(ctx)
+	if user.UpdateByReq(req) {
+		if err := s.Repository.UpdateUser(ctx.Request().Context(), nil, user); err != nil {
+			ctx.Logger().Errorf("%s, failed UpdateUser, err: %v", tracestr, err)
+			return response.InternalErrorResponse(ctx)
+		}
 	}
 
 	return ctx.JSON(http.StatusOK, generated.UserDataResponse{

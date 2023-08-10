@@ -251,7 +251,7 @@ components:
       pattern: ^\+62\d+$
       example: '+627000709251'
       x-oapi-codegen-extra-tags:
-        validate: omitempty,min=10,max=13,startswith=+62,e164
+        validate: required_without_all=FullName,omitempty,min=10,max=13,startswith=+62,e164
       description: Optional field phone numbers when filled must be at minimum 10 characters and maximum 13 characters and must start with the Indonesia country code “+62”.
 
     FullNameRequest:
@@ -266,5 +266,5 @@ components:
       minLength: 3
       maxLength: 60
       x-oapi-codegen-extra-tags:
-        validate: omitempty,min=3,max=60
+        validate: required_without_all=PhoneNumber,omitempty,min=3,max=60
       description: Optional field full name when filled must be at minimum 3 characters and maximum 60 characters.

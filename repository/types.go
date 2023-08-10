@@ -41,16 +41,22 @@ type User struct {
 	LoginCount   uint32
 }
 
-func (u *User) UpdateByReq(req generated.UpdateUserJSONRequestBody) {
+func (u *User) UpdateByReq(req generated.UpdateUserJSONRequestBody) bool {
 	if u == nil {
-		return
+		return false
 	}
 
-	if reqFullName := string_helper.GetAndTrimPointerStringValue(req.FullName); reqFullName != "" {
+	updated := false
+
+	if reqFullName := string_helper.GetAndTrimPointerStringValue(req.FullName); reqFullName != "" && reqFullName != u.FullName {
 		u.FullName = reqFullName
+		updated = true
 	}
 
-	if reqPhoneNumber := string_helper.GetAndTrimPointerStringValue(req.PhoneNumber); reqPhoneNumber != "" {
+	if reqPhoneNumber := string_helper.GetAndTrimPointerStringValue(req.PhoneNumber); reqPhoneNumber != "" && reqPhoneNumber != u.PhoneNumber {
 		u.PhoneNumber = reqPhoneNumber
+		updated = true
 	}
+
+	return updated
 }
