@@ -1,4 +1,4 @@
-# Backend Engineering Interview Assignment (Golang)
+# Sample BE for simple User Service
 
 ## Requirements
 
@@ -34,7 +34,7 @@ make init
 To run the project, run the following command:
 
 ```
-docker-compose up --build
+make run-docker
 ```
 
 You should be able to access the API at http://localhost:8080

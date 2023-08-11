@@ -22,8 +22,8 @@ func (s *Server) Register(ctx echo.Context) error {
 	}
 
 	var req generated.RegisterJSONRequestBody
-	if err := request_helper.BindAndValidateReqBody(ctx, s.Validator, &req); err != nil {
-		return err
+	if messages := request_helper.BindAndValidateReqBody(ctx, s.Validator, &req); len(messages) > 0 {
+		return response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
 	}
 
 	// check phone number

@@ -9,9 +9,18 @@
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- users table
+-- triggers
+CREATE OR REPLACE FUNCTION refresh_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = timezone('utc', now()); 
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- 'users' table
 CREATE TABLE users (
-    "id" UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
     "created_at" timestamp NOT NULL DEFAULT timezone('utc', now()),
     "updated_at" timestamp NOT NULL DEFAULT timezone('utc', now()),
     "deleted_at" timestamp,
@@ -21,6 +30,11 @@ CREATE TABLE users (
     "salt" VARCHAR(20) NOT NULL,
     "login_count" INTEGER NOT NULL DEFAULT 0
 );
+
+-- add trigger to 'users'
+CREATE TRIGGER refresh_users_updated_at BEFORE UPDATE
+ON users FOR EACH ROW EXECUTE PROCEDURE 
+refresh_updated_at_column();
 
 -- sample data, with password: pAssW0$ds
 INSERT INTO users ("phone_number", "full_name", "password_hash", "salt") 

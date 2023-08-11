@@ -29,7 +29,7 @@ func (s *Server) GetUser(ctx echo.Context) error {
 		Id: claims.Id,
 	})
 	if err != nil {
-		ctx.Logger().Errorf("%s, failed GetUser by Id err: %v", tracestr, err)
+		ctx.Logger().Errorf("%s, failed GetUser by Id, err: %v", tracestr, err)
 		return response.InternalErrorResponse(ctx)
 	}
 

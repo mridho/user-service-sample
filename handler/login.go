@@ -23,8 +23,8 @@ func (s *Server) Login(ctx echo.Context) error {
 	}
 
 	var req generated.LoginJSONRequestBody
-	if err := request_helper.BindAndValidateReqBody(ctx, s.Validator, &req); err != nil {
-		return err
+	if messages := request_helper.BindAndValidateReqBody(ctx, s.Validator, &req); len(messages) > 0 {
+		return response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
 	}
 
 	user, err := s.Repository.GetUser(ctx.Request().Context(), repository.GetUserInput{

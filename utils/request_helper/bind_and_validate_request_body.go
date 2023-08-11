@@ -1,28 +1,25 @@
 package request_helper
 
 import (
-	"errors"
-	"net/http"
-
-	"github.com/SawitProRecruitment/UserService/utils/response"
+	"github.com/SawitProRecruitment/UserService/generated"
 	"github.com/SawitProRecruitment/UserService/utils/structvalidator"
 	"github.com/labstack/echo/v4"
 )
 
-var (
-	ErrInvalidReqBody = errors.New("invalid req body")
-)
+type requestBody interface {
+	generated.LoginJSONRequestBody |
+		generated.RegisterJSONRequestBody |
+		generated.UpdateUserJSONRequestBody
+}
 
 // BindAndValidateReqBody binds the request body into 'reqPtr'(pointer to a req body struct)
 // and then validate the req body struct according to each fields validation tags
-func BindAndValidateReqBody[T any](ctx echo.Context, validator *structvalidator.StructValidator, reqPtr *T) error {
+func BindAndValidateReqBody[T requestBody](ctx echo.Context, validator *structvalidator.StructValidator, reqPtr *T) []string {
 	if err := ctx.Bind(reqPtr); err != nil {
-		response.SingleErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return err
+		return []string{err.Error()}
 	}
 	if messages, _ := validator.ValidateStruct(reqPtr); len(messages) > 0 {
-		response.StandardErrorResponse(ctx, http.StatusBadRequest, messages)
-		return ErrInvalidReqBody
+		return messages
 	}
 
 	return nil
