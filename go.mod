@@ -1,4 +1,4 @@
-module github.com/SawitProRecruitment/UserService
+module user-service-sample
 
 go 1.19
 

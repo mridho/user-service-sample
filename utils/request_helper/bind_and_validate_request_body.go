@@ -1,8 +1,9 @@
 package request_helper
 
 import (
-	"github.com/SawitProRecruitment/UserService/generated"
-	"github.com/SawitProRecruitment/UserService/utils/structvalidator"
+	"user-service-sample/generated"
+	"user-service-sample/utils/structvalidator"
+
 	"github.com/labstack/echo/v4"
 )
 

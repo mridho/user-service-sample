@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/SawitProRecruitment/UserService/generated"
-	"github.com/SawitProRecruitment/UserService/utils/string_helper"
+	"user-service-sample/generated"
+	"user-service-sample/utils/string_helper"
 )
 
 var (

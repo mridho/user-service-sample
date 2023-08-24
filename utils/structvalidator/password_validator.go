@@ -1,7 +1,8 @@
 package structvalidator
 
 import (
-	"github.com/SawitProRecruitment/UserService/utils/password"
+	"user-service-sample/utils/password"
+
 	"github.com/go-playground/validator/v10"
 )
 

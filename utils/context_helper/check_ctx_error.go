@@ -5,7 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/SawitProRecruitment/UserService/utils/response"
+	"user-service-sample/utils/response"
+
 	"github.com/labstack/echo/v4"
 )
 

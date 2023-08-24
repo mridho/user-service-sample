@@ -1,7 +1,8 @@
 package response
 
 import (
-	"github.com/SawitProRecruitment/UserService/generated"
+	"user-service-sample/generated"
+
 	"github.com/labstack/echo/v4"
 )
 

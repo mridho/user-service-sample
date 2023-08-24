@@ -3,9 +3,10 @@ package handler
 import (
 	"testing"
 
-	"github.com/SawitProRecruitment/UserService/config"
-	"github.com/SawitProRecruitment/UserService/repository"
-	"github.com/SawitProRecruitment/UserService/utils/test_helper"
+	"user-service-sample/config"
+	"user-service-sample/repository"
+	"user-service-sample/utils/test_helper"
+
 	"github.com/golang/mock/gomock"
 )
 

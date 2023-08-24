@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/SawitProRecruitment/UserService/repository"
-	"github.com/SawitProRecruitment/UserService/utils/response"
+	"user-service-sample/repository"
+	"user-service-sample/utils/response"
+
 	"github.com/labstack/echo/v4"
 )
 

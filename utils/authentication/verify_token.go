@@ -5,7 +5,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/SawitProRecruitment/UserService/config"
+	"user-service-sample/config"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"

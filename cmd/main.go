@@ -1,25 +1,37 @@
 package main
 
 import (
-	"github.com/SawitProRecruitment/UserService/config"
-	"github.com/SawitProRecruitment/UserService/generated"
-	"github.com/SawitProRecruitment/UserService/handler"
-	"github.com/SawitProRecruitment/UserService/repository"
+	"os"
+	"user-service-sample/config"
+	"user-service-sample/generated"
+	"user-service-sample/handler"
+	"user-service-sample/repository"
 
 	"github.com/labstack/echo/v4"
 )
 
-func main() {
-	e := echo.New()
+var (
+	e      *echo.Echo
+	cfg    *config.Config
+	err    error
+	server generated.ServerInterface
+)
 
-	cfg, err := config.NewConfig("config.yml")
+func init() {
+	e = echo.New()
+
+	cfgFile := "/opt/config.yml"
+	if _, err := os.Stat(cfgFile); err != nil {
+		cfgFile = "config.yml"
+	}
+	cfg, err = config.NewConfig(cfgFile)
 	if err != nil {
 		e.Logger.Fatal(err)
 	}
-	var server generated.ServerInterface = newServer(cfg)
+
+	server = newServer(cfg)
 
 	generated.RegisterHandlers(e, server)
-	e.Logger.Fatal(e.Start(":1323"))
 }
 
 func newServer(cfg *config.Config) *handler.Server {
@@ -32,4 +44,10 @@ func newServer(cfg *config.Config) *handler.Server {
 		Repository: repo,
 	}
 	return handler.NewServer(opts)
+}
+
+func main() {
+	if err := e.Start(":1323"); err != nil {
+		e.Logger.Fatal(err)
+	}
 }

@@ -3,13 +3,14 @@ package handler
 import (
 	"net/http"
 
-	"github.com/SawitProRecruitment/UserService/generated"
-	"github.com/SawitProRecruitment/UserService/repository"
-	"github.com/SawitProRecruitment/UserService/utils/authentication"
-	"github.com/SawitProRecruitment/UserService/utils/context_helper"
-	"github.com/SawitProRecruitment/UserService/utils/request_helper"
-	"github.com/SawitProRecruitment/UserService/utils/response"
-	"github.com/SawitProRecruitment/UserService/utils/string_helper"
+	"user-service-sample/generated"
+	"user-service-sample/repository"
+	"user-service-sample/utils/authentication"
+	"user-service-sample/utils/context_helper"
+	"user-service-sample/utils/request_helper"
+	"user-service-sample/utils/response"
+	"user-service-sample/utils/string_helper"
+
 	"github.com/labstack/echo/v4"
 )
 

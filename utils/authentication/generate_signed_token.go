@@ -4,8 +4,9 @@ import (
 	"crypto/rsa"
 	"time"
 
-	"github.com/SawitProRecruitment/UserService/config"
-	"github.com/SawitProRecruitment/UserService/repository"
+	"user-service-sample/config"
+	"user-service-sample/repository"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 

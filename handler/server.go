@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"github.com/SawitProRecruitment/UserService/config"
-	"github.com/SawitProRecruitment/UserService/repository"
-	"github.com/SawitProRecruitment/UserService/utils/structvalidator"
+	"user-service-sample/config"
+	"user-service-sample/repository"
+	"user-service-sample/utils/structvalidator"
 )
 
 type Server struct {
